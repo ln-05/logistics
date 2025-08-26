@@ -1,0 +1,17 @@
+Minio:
+  Endpoint: 14.103.168.20:9000
+  AccessKeyId: minio_JspNRM
+  AccessKeySecret: cd423a2933d92b70
+  BucketName: video
+  UseSsl: false
+  BasePath: ""
+  BucketUrl: http://14.103.168.20:9000/video
+
+Wechat:
+  AppID: "wxcdda396e027fbf56"
+  AppSecret: "5ed0492fceaacf9bbb17fa32cef64577"
+
+Redis:
+  Host: "14.103.168.20:6379"
+  Password: "cd423a2933d92b70"
+  Db: 0

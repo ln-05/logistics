@@ -1,0 +1,314 @@
+syntax = "proto3";
+
+package proto;
+option go_package="./";
+
+message SendSmsRequest {
+  string mobile=1;
+  string SendSmsCode=2;
+}
+message SendSmsResponse {
+  int64 code = 1;
+  string message = 2;
+}
+
+message LoginRequest {
+  string mobile=1;
+  string SendSmsCode=2;
+}
+message LoginResponse {
+  int64 Id= 1;
+}
+
+message CreateLogisticsOrderRequest {
+  string creator_id = 1;
+  string sender_name = 2;
+  string sender_mobile = 3;
+  string sender_address = 4;
+  string receiver_name = 5;
+  string receiver_mobile = 6;
+  string receiver_address = 7;
+  string cargo_type = 8;
+  float cargo_weight = 9;
+  float cargo_volume = 10;
+  int32 cargo_quantity = 11;
+  string transport_type = 12;
+  string remark = 13;
+}
+
+message CreateLogisticsOrderResponse {
+  string waybill_id = 1;
+  string message = 2;
+}
+
+
+
+// 运单查询请求 (支持单条查询和条件查询)
+message GetWaybillRequest {
+  string waybill_id = 1;            // 运单编号 (可选，用于单条查询)
+  string creator_id = 2;            // 创建人ID (可选)
+  string status = 3;                // 运单状态 (可选)
+  string sender_mobile = 4;         // 发货人电话 (可选)
+  string receiver_mobile = 5;       // 收货人电话 (可选)
+  string transport_type = 6;        // 运输方式 (可选)
+  string start_date = 7;            // 开始日期 (可选, 格式: 2024-01-01)
+  string end_date = 8;              // 结束日期 (可选, 格式: 2024-01-31)
+  int32 page = 9;                   // 页码 (默认1)
+  int32 page_size = 10;             // 每页数量 (默认10, 最大100)
+}
+
+// 运单查询响应
+message GetWaybillResponse {
+  int32 code = 1;                   // 响应码 (0-成功, 其他-失败)
+  string message = 2;               // 响应消息
+  repeated WaybillInfo waybills = 3; // 运单信息列表
+  int32 total = 4;                  // 总数量 (单条查询时为1或0)
+  int32 page = 5;                   // 当前页码
+  int32 page_size = 6;              // 每页数量
+  int32 total_pages = 7;            // 总页数
+}
+
+// 运单信息 (完全对应数据库表结构)
+message WaybillInfo {
+  string id = 1;                    // 运单编号
+  string order_id = 2;              // 关联订单编号
+  int32 creator_id = 3;             // 创建人ID
+  string sender_name = 4;           // 发货人姓名
+  string sender_mobile = 5;         // 发货人电话
+  string sender_address = 6;        // 发货地址
+  string receiver_name = 7;         // 收货人姓名
+  string receiver_mobile = 8;       // 收货人电话
+  string receiver_address = 9;      // 收货地址
+  string cargo_type = 10;           // 货物类型
+  double cargo_weight = 11;         // 货物重量(kg) - decimal(10,2)
+  double cargo_volume = 12;         // 货物体积(m³) - decimal(10,2)
+  int32 cargo_quantity = 13;        // 货物数量
+  string transport_type = 14;       // 运输方式(陆运/空运/海运)
+  string vehicle_id = 15;           // 运输车辆ID (可为空)
+  int32 drive_id = 16;              // 司机ID (可为空，0表示未分配)
+  string status = 17;               // 运单状态(pending/assigned/in_transit/completed/canceled)
+  string estimated_arrival = 18;    // 预计到达时间 (ISO格式字符串，可为空)
+  string actual_arrival = 19;       // 实际到达时间 (ISO格式字符串，可为空)
+  double freight = 20;              // 运费金额 - decimal(10,2)
+  string remark = 21;               // 备注信息 (可为空)
+  string abnormal_reason = 22;      // 异常原因 (可为空)
+  string create_at = 23;            // 创建时间 (ISO格式字符串)
+  string update_at = 24;            // 更新时间 (ISO格式字符串)
+}
+
+// 运单状态更新请求
+message UpdateWaybillStatusRequest {
+  string waybill_id = 1;            // 运单编号 (必填)
+  string new_status = 2;            // 新状态 (必填: pending/assigned/in_transit/completed/canceled)
+  int32 operator_id = 3;            // 操作人ID (必填)
+  string remark = 4;                // 操作备注 (可选)
+  string vehicle_id = 5;            // 运输车辆ID (可选，状态为assigned时可填)
+  int32 drive_id = 6;               // 司机ID (可选，状态为assigned时可填)
+  string estimated_arrival = 7;     // 预计到达时间 (可选，格式: 2024-01-01 15:04:05)
+  string actual_arrival = 8;        // 实际到达时间 (可选，状态为completed时可填)
+  string abnormal_reason = 9;       // 异常原因 (可选，状态为canceled时可填)
+  double freight = 10;              // 运费金额 (可选)
+}
+
+// 运单状态更新响应
+message UpdateWaybillStatusResponse {
+  int32 code = 1;                   // 响应码 (0-成功, 其他-失败)
+  string message = 2;               // 响应消息
+  string waybill_id = 3;            // 运单编号
+  string old_status = 4;            // 旧状态
+  string new_status = 5;            // 新状态
+  string update_time = 6;           // 更新时间
+}
+
+// 运单信息修改请求
+message UpdateWaybillInfoRequest {
+  string waybill_id = 1;            // 运单编号 (必填)
+  int32 operator_id = 2;            // 操作人ID (必填，用于权限校验)
+
+  // 发件人信息 (可选修改)
+  string sender_name = 3;           // 发货人姓名
+  string sender_mobile = 4;         // 发货人电话
+  string sender_address = 5;        // 发货地址
+
+  // 收件人信息 (可选修改)
+  string receiver_name = 6;         // 收货人姓名
+  string receiver_mobile = 7;       // 收货人电话
+  string receiver_address = 8;      // 收货地址
+
+  // 货物信息 (可选修改)
+  string cargo_type = 9;            // 货物类型
+  double cargo_weight = 10;         // 货物重量(kg)
+  double cargo_volume = 11;         // 货物体积(m³)
+  int32 cargo_quantity = 12;        // 货物数量
+  string transport_type = 13;       // 运输方式
+
+  // 其他信息 (可选修改)
+  string remark = 14;               // 备注信息
+  double freight = 15;              // 运费金额
+}
+
+// 运单信息修改响应
+message UpdateWaybillInfoResponse {
+  int32 code = 1;                   // 响应码 (0-成功, 其他-失败)
+  string message = 2;               // 响应消息
+  string waybill_id = 3;            // 运单编号
+  string update_time = 4;           // 更新时间
+}
+
+// 运单取消请求
+message CancelWaybillRequest {
+  string waybill_id = 1;            // 运单编号 (必填)
+  int32 operator_id = 2;            // 操作人ID (必填，用于权限校验)
+  string cancel_reason = 3;         // 取消原因 (必填)
+  string remark = 4;                // 备注信息 (可选)
+}
+
+// 运单取消响应
+message CancelWaybillResponse {
+  int32 code = 1;                   // 响应码 (0-成功, 其他-失败)
+  string message = 2;               // 响应消息
+  string waybill_id = 3;            // 运单编号
+  string old_status = 4;            // 原状态
+  string new_status = 5;            // 新状态 (canceled)
+  string cancel_time = 6;           // 取消时间
+}
+
+// 运单轨迹节点信息
+message WaybillTrackNode {
+  int32 id = 1;                     // 日志ID
+  string old_status = 2;            // 旧状态
+  string new_status = 3;            // 新状态
+  string status_name = 4;           // 状态中文名称
+  string operate_time = 5;          // 操作时间
+  string remark = 6;                // 操作备注
+
+  // 操作人信息
+  int32 operator_id = 7;            // 操作人ID
+  string operator_name = 8;         // 操作人姓名
+  string operator_mobile = 9;       // 操作人电话
+
+  // 位置信息（基于状态推断）
+  string location = 10;             // 当前位置描述
+  string address = 11;              // 详细地址
+}
+
+// 运单轨迹查询请求
+message GetWaybillTrackRequest {
+  string waybill_id = 1;            // 运单编号 (必填)
+}
+
+// 运单轨迹查询响应
+message GetWaybillTrackResponse {
+  int32 code = 1;                   // 响应码 (0-成功, 其他-失败)
+  string message = 2;               // 响应消息
+  string waybill_id = 3;            // 运单编号
+
+  // 运单基本信息
+  string sender_name = 4;           // 发货人姓名
+  string sender_address = 5;        // 发货地址
+  string receiver_name = 6;         // 收货人姓名
+  string receiver_address = 7;      // 收货地址
+  string current_status = 8;        // 当前状态
+  string create_time = 9;           // 创建时间
+
+  // 轨迹节点列表（按时间正序排列）
+  repeated WaybillTrackNode track_nodes = 10;
+
+  // 统计信息
+  int32 total_nodes = 11;           // 总节点数
+  string last_update_time = 12;     // 最后更新时间
+}
+
+// 费用明细项
+message FreightItem {
+  string name = 1;                  // 费用项名称
+  double unit_price = 2;            // 单价
+  double quantity = 3;              // 数量
+  string unit = 4;                  // 单位
+  double amount = 5;                // 金额
+  string description = 6;           // 说明
+}
+
+// 运单费用计算请求
+message CalculateFreightRequest {
+  // 货物信息 (必填)
+  string cargo_type = 1;            // 货物类型
+  double cargo_weight = 2;          // 货物重量(kg)
+  double cargo_volume = 3;          // 货物体积(m³)
+  int32 cargo_quantity = 4;         // 货物数量
+
+  // 地址信息 (必填)
+  string sender_address = 5;        // 发货地址
+  string receiver_address = 6;      // 收货地址
+
+  // 运输要求 (必填)
+  string transport_type = 7;        // 运输方式(陆运/空运/海运)
+  string service_type = 8;          // 服务类型(标准/加急/特快)
+
+  // 时效要求 (可选)
+  string required_delivery_time = 9; // 要求送达时间 (格式: 2024-01-15 18:00:00)
+  bool is_urgent = 10;              // 是否加急
+
+  // 增值服务 (可选)
+  bool need_insurance = 11;         // 是否需要保险
+  double insurance_value = 12;      // 保险价值
+  bool need_receipt = 13;           // 是否需要回单
+  bool need_packaging = 14;         // 是否需要包装服务
+}
+
+// 运单费用计算响应
+message CalculateFreightResponse {
+  int32 code = 1;                   // 响应码 (0-成功, 其他-失败)
+  string message = 2;               // 响应消息
+
+  // 费用信息
+  double total_freight = 3;         // 总运费
+  double base_freight = 4;          // 基础运费
+  double additional_freight = 5;    // 附加费用
+  double discount_amount = 6;       // 优惠金额
+
+  // 费用明细
+  repeated FreightItem freight_items = 7; // 费用明细列表
+
+  // 计算依据
+  double calculated_distance = 8;   // 计算距离(km)
+  double weight_factor = 9;         // 重量系数
+  double volume_factor = 10;        // 体积系数
+  double distance_factor = 11;      // 距离系数
+  double service_factor = 12;       // 服务系数
+
+  // 时效信息
+  string estimated_delivery_time = 13; // 预计送达时间
+  int32 estimated_days = 14;        // 预计天数
+
+  // 其他信息
+  string freight_rule = 15;         // 计费规则说明
+  string validity_period = 16;      // 报价有效期
+  string calculation_time = 17;     // 计算时间
+}
+
+service User {
+  rpc SendSms(SendSmsRequest) returns(SendSmsResponse);
+  rpc Login(LoginRequest) returns(LoginResponse);
+
+  rpc CreateLogisticsOrder(CreateLogisticsOrderRequest) returns(CreateLogisticsOrderResponse);
+
+  // 运单查询接口 (支持单条查询和条件查询，带分页)
+  rpc GetWaybill(GetWaybillRequest) returns(GetWaybillResponse);
+
+  // 运单状态更新接口
+  rpc UpdateWaybillStatus(UpdateWaybillStatusRequest) returns(UpdateWaybillStatusResponse);
+
+  // 运单信息修改接口
+  rpc UpdateWaybillInfo(UpdateWaybillInfoRequest) returns(UpdateWaybillInfoResponse);
+
+  // 运单取消接口
+  rpc CancelWaybill(CancelWaybillRequest) returns(CancelWaybillResponse);
+
+  // 运单轨迹查询接口
+  rpc GetWaybillTrack(GetWaybillTrackRequest) returns(GetWaybillTrackResponse);
+
+  // 运单费用计算接口
+  rpc CalculateFreight(CalculateFreightRequest) returns(CalculateFreightResponse);
+}
+
