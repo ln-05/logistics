@@ -2163,6 +2163,540 @@ func (x *CalculateFreightResponse) GetCalculationTime() string {
 	return ""
 }
 
+// 运单资源绑定请求 (简化版，直接更新运单表的vehicle_id和drive_id字段)
+type BindWaybillResourceRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WaybillId     string                 `protobuf:"bytes,1,opt,name=waybill_id,json=waybillId,proto3" json:"waybill_id,omitempty"`     // 运单编号(必填)
+	VehicleId     string                 `protobuf:"bytes,2,opt,name=vehicle_id,json=vehicleId,proto3" json:"vehicle_id,omitempty"`     // 车辆ID(可选)
+	DriverId      int32                  `protobuf:"varint,3,opt,name=driver_id,json=driverId,proto3" json:"driver_id,omitempty"`       // 司机ID(可选)
+	OperatorId    int32                  `protobuf:"varint,4,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"` // 操作人ID(必填)
+	Remark        string                 `protobuf:"bytes,5,opt,name=remark,proto3" json:"remark,omitempty"`                            // 备注信息(可选)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BindWaybillResourceRequest) Reset() {
+	*x = BindWaybillResourceRequest{}
+	mi := &file_user_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BindWaybillResourceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BindWaybillResourceRequest) ProtoMessage() {}
+
+func (x *BindWaybillResourceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BindWaybillResourceRequest.ProtoReflect.Descriptor instead.
+func (*BindWaybillResourceRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *BindWaybillResourceRequest) GetWaybillId() string {
+	if x != nil {
+		return x.WaybillId
+	}
+	return ""
+}
+
+func (x *BindWaybillResourceRequest) GetVehicleId() string {
+	if x != nil {
+		return x.VehicleId
+	}
+	return ""
+}
+
+func (x *BindWaybillResourceRequest) GetDriverId() int32 {
+	if x != nil {
+		return x.DriverId
+	}
+	return 0
+}
+
+func (x *BindWaybillResourceRequest) GetOperatorId() int32 {
+	if x != nil {
+		return x.OperatorId
+	}
+	return 0
+}
+
+func (x *BindWaybillResourceRequest) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+// 运单资源绑定响应
+type BindWaybillResourceResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`                           // 响应码(0-成功, 其他-失败)
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`                      // 响应消息
+	WaybillId     string                 `protobuf:"bytes,3,opt,name=waybill_id,json=waybillId,proto3" json:"waybill_id,omitempty"` // 运单编号
+	VehicleId     string                 `protobuf:"bytes,4,opt,name=vehicle_id,json=vehicleId,proto3" json:"vehicle_id,omitempty"` // 绑定的车辆ID
+	DriverId      int32                  `protobuf:"varint,5,opt,name=driver_id,json=driverId,proto3" json:"driver_id,omitempty"`   // 绑定的司机ID
+	BindTime      string                 `protobuf:"bytes,6,opt,name=bind_time,json=bindTime,proto3" json:"bind_time,omitempty"`    // 绑定时间
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BindWaybillResourceResponse) Reset() {
+	*x = BindWaybillResourceResponse{}
+	mi := &file_user_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BindWaybillResourceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BindWaybillResourceResponse) ProtoMessage() {}
+
+func (x *BindWaybillResourceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BindWaybillResourceResponse.ProtoReflect.Descriptor instead.
+func (*BindWaybillResourceResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *BindWaybillResourceResponse) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *BindWaybillResourceResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *BindWaybillResourceResponse) GetWaybillId() string {
+	if x != nil {
+		return x.WaybillId
+	}
+	return ""
+}
+
+func (x *BindWaybillResourceResponse) GetVehicleId() string {
+	if x != nil {
+		return x.VehicleId
+	}
+	return ""
+}
+
+func (x *BindWaybillResourceResponse) GetDriverId() int32 {
+	if x != nil {
+		return x.DriverId
+	}
+	return 0
+}
+
+func (x *BindWaybillResourceResponse) GetBindTime() string {
+	if x != nil {
+		return x.BindTime
+	}
+	return ""
+}
+
+// 查询运单资源请求
+type GetWaybillResourcesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WaybillId     string                 `protobuf:"bytes,1,opt,name=waybill_id,json=waybillId,proto3" json:"waybill_id,omitempty"` // 运单编号(必填)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetWaybillResourcesRequest) Reset() {
+	*x = GetWaybillResourcesRequest{}
+	mi := &file_user_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetWaybillResourcesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetWaybillResourcesRequest) ProtoMessage() {}
+
+func (x *GetWaybillResourcesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetWaybillResourcesRequest.ProtoReflect.Descriptor instead.
+func (*GetWaybillResourcesRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GetWaybillResourcesRequest) GetWaybillId() string {
+	if x != nil {
+		return x.WaybillId
+	}
+	return ""
+}
+
+// 查询运单资源响应
+type GetWaybillResourcesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`                                    // 响应码(0-成功, 其他-失败)
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`                               // 响应消息
+	WaybillId     string                 `protobuf:"bytes,3,opt,name=waybill_id,json=waybillId,proto3" json:"waybill_id,omitempty"`          // 运单编号
+	VehicleId     string                 `protobuf:"bytes,4,opt,name=vehicle_id,json=vehicleId,proto3" json:"vehicle_id,omitempty"`          // 绑定的车辆ID
+	DriverId      int32                  `protobuf:"varint,5,opt,name=driver_id,json=driverId,proto3" json:"driver_id,omitempty"`            // 绑定的司机ID
+	DriverName    string                 `protobuf:"bytes,6,opt,name=driver_name,json=driverName,proto3" json:"driver_name,omitempty"`       // 司机姓名
+	DriverMobile  string                 `protobuf:"bytes,7,opt,name=driver_mobile,json=driverMobile,proto3" json:"driver_mobile,omitempty"` // 司机电话
+	BindTime      string                 `protobuf:"bytes,8,opt,name=bind_time,json=bindTime,proto3" json:"bind_time,omitempty"`             // 绑定时间
+	Status        string                 `protobuf:"bytes,9,opt,name=status,proto3" json:"status,omitempty"`                                 // 运单状态
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetWaybillResourcesResponse) Reset() {
+	*x = GetWaybillResourcesResponse{}
+	mi := &file_user_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetWaybillResourcesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetWaybillResourcesResponse) ProtoMessage() {}
+
+func (x *GetWaybillResourcesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetWaybillResourcesResponse.ProtoReflect.Descriptor instead.
+func (*GetWaybillResourcesResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *GetWaybillResourcesResponse) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *GetWaybillResourcesResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetWaybillResourcesResponse) GetWaybillId() string {
+	if x != nil {
+		return x.WaybillId
+	}
+	return ""
+}
+
+func (x *GetWaybillResourcesResponse) GetVehicleId() string {
+	if x != nil {
+		return x.VehicleId
+	}
+	return ""
+}
+
+func (x *GetWaybillResourcesResponse) GetDriverId() int32 {
+	if x != nil {
+		return x.DriverId
+	}
+	return 0
+}
+
+func (x *GetWaybillResourcesResponse) GetDriverName() string {
+	if x != nil {
+		return x.DriverName
+	}
+	return ""
+}
+
+func (x *GetWaybillResourcesResponse) GetDriverMobile() string {
+	if x != nil {
+		return x.DriverMobile
+	}
+	return ""
+}
+
+func (x *GetWaybillResourcesResponse) GetBindTime() string {
+	if x != nil {
+		return x.BindTime
+	}
+	return ""
+}
+
+func (x *GetWaybillResourcesResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+// 异常上报请求
+type ReportExceptionRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	WaybillId      string                 `protobuf:"bytes,1,opt,name=waybill_id,json=waybillId,proto3" json:"waybill_id,omitempty"`                // 运单ID (必填)
+	ExceptionType  string                 `protobuf:"bytes,2,opt,name=exception_type,json=exceptionType,proto3" json:"exception_type,omitempty"`    // 异常类型 (必填: damage/delay/lost/address_error/refused)
+	Description    string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`                             // 异常描述 (必填)
+	ReporterId     int32                  `protobuf:"varint,4,opt,name=reporter_id,json=reporterId,proto3" json:"reporter_id,omitempty"`            // 上报人ID (必填)
+	ReporterType   string                 `protobuf:"bytes,5,opt,name=reporter_type,json=reporterType,proto3" json:"reporter_type,omitempty"`       // 上报人类型 (必填: driver/customer_service/customer)
+	Location       string                 `protobuf:"bytes,6,opt,name=location,proto3" json:"location,omitempty"`                                   // 异常发生地点 (可选)
+	AttachmentUrls []string               `protobuf:"bytes,7,rep,name=attachment_urls,json=attachmentUrls,proto3" json:"attachment_urls,omitempty"` // 附件URL列表 (可选)
+	DamageLevel    string                 `protobuf:"bytes,8,opt,name=damage_level,json=damageLevel,proto3" json:"damage_level,omitempty"`          // 损坏程度 (可选: minor/moderate/severe)
+	EstimatedLoss  float64                `protobuf:"fixed64,9,opt,name=estimated_loss,json=estimatedLoss,proto3" json:"estimated_loss,omitempty"`  // 预估损失金额 (可选)
+	ContactPhone   string                 `protobuf:"bytes,10,opt,name=contact_phone,json=contactPhone,proto3" json:"contact_phone,omitempty"`      // 联系电话 (可选)
+	Remark         string                 `protobuf:"bytes,11,opt,name=remark,proto3" json:"remark,omitempty"`                                      // 备注信息 (可选)
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *ReportExceptionRequest) Reset() {
+	*x = ReportExceptionRequest{}
+	mi := &file_user_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportExceptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportExceptionRequest) ProtoMessage() {}
+
+func (x *ReportExceptionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportExceptionRequest.ProtoReflect.Descriptor instead.
+func (*ReportExceptionRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *ReportExceptionRequest) GetWaybillId() string {
+	if x != nil {
+		return x.WaybillId
+	}
+	return ""
+}
+
+func (x *ReportExceptionRequest) GetExceptionType() string {
+	if x != nil {
+		return x.ExceptionType
+	}
+	return ""
+}
+
+func (x *ReportExceptionRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *ReportExceptionRequest) GetReporterId() int32 {
+	if x != nil {
+		return x.ReporterId
+	}
+	return 0
+}
+
+func (x *ReportExceptionRequest) GetReporterType() string {
+	if x != nil {
+		return x.ReporterType
+	}
+	return ""
+}
+
+func (x *ReportExceptionRequest) GetLocation() string {
+	if x != nil {
+		return x.Location
+	}
+	return ""
+}
+
+func (x *ReportExceptionRequest) GetAttachmentUrls() []string {
+	if x != nil {
+		return x.AttachmentUrls
+	}
+	return nil
+}
+
+func (x *ReportExceptionRequest) GetDamageLevel() string {
+	if x != nil {
+		return x.DamageLevel
+	}
+	return ""
+}
+
+func (x *ReportExceptionRequest) GetEstimatedLoss() float64 {
+	if x != nil {
+		return x.EstimatedLoss
+	}
+	return 0
+}
+
+func (x *ReportExceptionRequest) GetContactPhone() string {
+	if x != nil {
+		return x.ContactPhone
+	}
+	return ""
+}
+
+func (x *ReportExceptionRequest) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+// 异常上报响应
+type ReportExceptionResponse struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Code                int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`                                                           // 响应码 (0-成功, 其他-失败)
+	Message             string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`                                                      // 响应消息
+	ExceptionId         string                 `protobuf:"bytes,3,opt,name=exception_id,json=exceptionId,proto3" json:"exception_id,omitempty"`                           // 异常单号
+	WaybillId           string                 `protobuf:"bytes,4,opt,name=waybill_id,json=waybillId,proto3" json:"waybill_id,omitempty"`                                 // 运单ID
+	ReportTime          string                 `protobuf:"bytes,5,opt,name=report_time,json=reportTime,proto3" json:"report_time,omitempty"`                              // 上报时间 (ISO格式字符串)
+	ExpectedResolveTime string                 `protobuf:"bytes,6,opt,name=expected_resolve_time,json=expectedResolveTime,proto3" json:"expected_resolve_time,omitempty"` // 预计解决时间 (ISO格式字符串)
+	Status              string                 `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`                                                        // 异常状态 (reported)
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *ReportExceptionResponse) Reset() {
+	*x = ReportExceptionResponse{}
+	mi := &file_user_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportExceptionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportExceptionResponse) ProtoMessage() {}
+
+func (x *ReportExceptionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportExceptionResponse.ProtoReflect.Descriptor instead.
+func (*ReportExceptionResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *ReportExceptionResponse) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *ReportExceptionResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *ReportExceptionResponse) GetExceptionId() string {
+	if x != nil {
+		return x.ExceptionId
+	}
+	return ""
+}
+
+func (x *ReportExceptionResponse) GetWaybillId() string {
+	if x != nil {
+		return x.WaybillId
+	}
+	return ""
+}
+
+func (x *ReportExceptionResponse) GetReportTime() string {
+	if x != nil {
+		return x.ReportTime
+	}
+	return ""
+}
+
+func (x *ReportExceptionResponse) GetExpectedResolveTime() string {
+	if x != nil {
+		return x.ExpectedResolveTime
+	}
+	return ""
+}
+
+func (x *ReportExceptionResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
 var File_user_proto protoreflect.FileDescriptor
 
 const file_user_proto_rawDesc = "" +
@@ -2411,7 +2945,66 @@ const file_user_proto_rawDesc = "" +
 	"\x0eestimated_days\x18\x0e \x01(\x05R\restimatedDays\x12!\n" +
 	"\ffreight_rule\x18\x0f \x01(\tR\vfreightRule\x12'\n" +
 	"\x0fvalidity_period\x18\x10 \x01(\tR\x0evalidityPeriod\x12)\n" +
-	"\x10calculation_time\x18\x11 \x01(\tR\x0fcalculationTime2\xc1\x05\n" +
+	"\x10calculation_time\x18\x11 \x01(\tR\x0fcalculationTime\"\xb0\x01\n" +
+	"\x1aBindWaybillResourceRequest\x12\x1d\n" +
+	"\n" +
+	"waybill_id\x18\x01 \x01(\tR\twaybillId\x12\x1d\n" +
+	"\n" +
+	"vehicle_id\x18\x02 \x01(\tR\tvehicleId\x12\x1b\n" +
+	"\tdriver_id\x18\x03 \x01(\x05R\bdriverId\x12\x1f\n" +
+	"\voperator_id\x18\x04 \x01(\x05R\n" +
+	"operatorId\x12\x16\n" +
+	"\x06remark\x18\x05 \x01(\tR\x06remark\"\xc3\x01\n" +
+	"\x1bBindWaybillResourceResponse\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1d\n" +
+	"\n" +
+	"waybill_id\x18\x03 \x01(\tR\twaybillId\x12\x1d\n" +
+	"\n" +
+	"vehicle_id\x18\x04 \x01(\tR\tvehicleId\x12\x1b\n" +
+	"\tdriver_id\x18\x05 \x01(\x05R\bdriverId\x12\x1b\n" +
+	"\tbind_time\x18\x06 \x01(\tR\bbindTime\";\n" +
+	"\x1aGetWaybillResourcesRequest\x12\x1d\n" +
+	"\n" +
+	"waybill_id\x18\x01 \x01(\tR\twaybillId\"\xa1\x02\n" +
+	"\x1bGetWaybillResourcesResponse\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1d\n" +
+	"\n" +
+	"waybill_id\x18\x03 \x01(\tR\twaybillId\x12\x1d\n" +
+	"\n" +
+	"vehicle_id\x18\x04 \x01(\tR\tvehicleId\x12\x1b\n" +
+	"\tdriver_id\x18\x05 \x01(\x05R\bdriverId\x12\x1f\n" +
+	"\vdriver_name\x18\x06 \x01(\tR\n" +
+	"driverName\x12#\n" +
+	"\rdriver_mobile\x18\a \x01(\tR\fdriverMobile\x12\x1b\n" +
+	"\tbind_time\x18\b \x01(\tR\bbindTime\x12\x16\n" +
+	"\x06status\x18\t \x01(\tR\x06status\"\x92\x03\n" +
+	"\x16ReportExceptionRequest\x12\x1d\n" +
+	"\n" +
+	"waybill_id\x18\x01 \x01(\tR\twaybillId\x12%\n" +
+	"\x0eexception_type\x18\x02 \x01(\tR\rexceptionType\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1f\n" +
+	"\vreporter_id\x18\x04 \x01(\x05R\n" +
+	"reporterId\x12#\n" +
+	"\rreporter_type\x18\x05 \x01(\tR\freporterType\x12\x1a\n" +
+	"\blocation\x18\x06 \x01(\tR\blocation\x12'\n" +
+	"\x0fattachment_urls\x18\a \x03(\tR\x0eattachmentUrls\x12!\n" +
+	"\fdamage_level\x18\b \x01(\tR\vdamageLevel\x12%\n" +
+	"\x0eestimated_loss\x18\t \x01(\x01R\restimatedLoss\x12#\n" +
+	"\rcontact_phone\x18\n" +
+	" \x01(\tR\fcontactPhone\x12\x16\n" +
+	"\x06remark\x18\v \x01(\tR\x06remark\"\xf6\x01\n" +
+	"\x17ReportExceptionResponse\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12!\n" +
+	"\fexception_id\x18\x03 \x01(\tR\vexceptionId\x12\x1d\n" +
+	"\n" +
+	"waybill_id\x18\x04 \x01(\tR\twaybillId\x12\x1f\n" +
+	"\vreport_time\x18\x05 \x01(\tR\n" +
+	"reportTime\x122\n" +
+	"\x15expected_resolve_time\x18\x06 \x01(\tR\x13expectedResolveTime\x12\x16\n" +
+	"\x06status\x18\a \x01(\tR\x06status2\xcf\a\n" +
 	"\x04User\x128\n" +
 	"\aSendSms\x12\x15.proto.SendSmsRequest\x1a\x16.proto.SendSmsResponse\x122\n" +
 	"\x05Login\x12\x13.proto.LoginRequest\x1a\x14.proto.LoginResponse\x12_\n" +
@@ -2422,7 +3015,10 @@ const file_user_proto_rawDesc = "" +
 	"\x11UpdateWaybillInfo\x12\x1f.proto.UpdateWaybillInfoRequest\x1a .proto.UpdateWaybillInfoResponse\x12J\n" +
 	"\rCancelWaybill\x12\x1b.proto.CancelWaybillRequest\x1a\x1c.proto.CancelWaybillResponse\x12P\n" +
 	"\x0fGetWaybillTrack\x12\x1d.proto.GetWaybillTrackRequest\x1a\x1e.proto.GetWaybillTrackResponse\x12S\n" +
-	"\x10CalculateFreight\x12\x1e.proto.CalculateFreightRequest\x1a\x1f.proto.CalculateFreightResponseB\x04Z\x02./b\x06proto3"
+	"\x10CalculateFreight\x12\x1e.proto.CalculateFreightRequest\x1a\x1f.proto.CalculateFreightResponse\x12\\\n" +
+	"\x13BindWaybillResource\x12!.proto.BindWaybillResourceRequest\x1a\".proto.BindWaybillResourceResponse\x12\\\n" +
+	"\x13GetWaybillResources\x12!.proto.GetWaybillResourcesRequest\x1a\".proto.GetWaybillResourcesResponse\x12P\n" +
+	"\x0fReportException\x12\x1d.proto.ReportExceptionRequest\x1a\x1e.proto.ReportExceptionResponseB\x04Z\x02./b\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once
@@ -2436,7 +3032,7 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_user_proto_goTypes = []any{
 	(*SendSmsRequest)(nil),               // 0: proto.SendSmsRequest
 	(*SendSmsResponse)(nil),              // 1: proto.SendSmsResponse
@@ -2459,6 +3055,12 @@ var file_user_proto_goTypes = []any{
 	(*FreightItem)(nil),                  // 18: proto.FreightItem
 	(*CalculateFreightRequest)(nil),      // 19: proto.CalculateFreightRequest
 	(*CalculateFreightResponse)(nil),     // 20: proto.CalculateFreightResponse
+	(*BindWaybillResourceRequest)(nil),   // 21: proto.BindWaybillResourceRequest
+	(*BindWaybillResourceResponse)(nil),  // 22: proto.BindWaybillResourceResponse
+	(*GetWaybillResourcesRequest)(nil),   // 23: proto.GetWaybillResourcesRequest
+	(*GetWaybillResourcesResponse)(nil),  // 24: proto.GetWaybillResourcesResponse
+	(*ReportExceptionRequest)(nil),       // 25: proto.ReportExceptionRequest
+	(*ReportExceptionResponse)(nil),      // 26: proto.ReportExceptionResponse
 }
 var file_user_proto_depIdxs = []int32{
 	8,  // 0: proto.GetWaybillResponse.waybills:type_name -> proto.WaybillInfo
@@ -2473,17 +3075,23 @@ var file_user_proto_depIdxs = []int32{
 	13, // 9: proto.User.CancelWaybill:input_type -> proto.CancelWaybillRequest
 	16, // 10: proto.User.GetWaybillTrack:input_type -> proto.GetWaybillTrackRequest
 	19, // 11: proto.User.CalculateFreight:input_type -> proto.CalculateFreightRequest
-	1,  // 12: proto.User.SendSms:output_type -> proto.SendSmsResponse
-	3,  // 13: proto.User.Login:output_type -> proto.LoginResponse
-	5,  // 14: proto.User.CreateLogisticsOrder:output_type -> proto.CreateLogisticsOrderResponse
-	7,  // 15: proto.User.GetWaybill:output_type -> proto.GetWaybillResponse
-	10, // 16: proto.User.UpdateWaybillStatus:output_type -> proto.UpdateWaybillStatusResponse
-	12, // 17: proto.User.UpdateWaybillInfo:output_type -> proto.UpdateWaybillInfoResponse
-	14, // 18: proto.User.CancelWaybill:output_type -> proto.CancelWaybillResponse
-	17, // 19: proto.User.GetWaybillTrack:output_type -> proto.GetWaybillTrackResponse
-	20, // 20: proto.User.CalculateFreight:output_type -> proto.CalculateFreightResponse
-	12, // [12:21] is the sub-list for method output_type
-	3,  // [3:12] is the sub-list for method input_type
+	21, // 12: proto.User.BindWaybillResource:input_type -> proto.BindWaybillResourceRequest
+	23, // 13: proto.User.GetWaybillResources:input_type -> proto.GetWaybillResourcesRequest
+	25, // 14: proto.User.ReportException:input_type -> proto.ReportExceptionRequest
+	1,  // 15: proto.User.SendSms:output_type -> proto.SendSmsResponse
+	3,  // 16: proto.User.Login:output_type -> proto.LoginResponse
+	5,  // 17: proto.User.CreateLogisticsOrder:output_type -> proto.CreateLogisticsOrderResponse
+	7,  // 18: proto.User.GetWaybill:output_type -> proto.GetWaybillResponse
+	10, // 19: proto.User.UpdateWaybillStatus:output_type -> proto.UpdateWaybillStatusResponse
+	12, // 20: proto.User.UpdateWaybillInfo:output_type -> proto.UpdateWaybillInfoResponse
+	14, // 21: proto.User.CancelWaybill:output_type -> proto.CancelWaybillResponse
+	17, // 22: proto.User.GetWaybillTrack:output_type -> proto.GetWaybillTrackResponse
+	20, // 23: proto.User.CalculateFreight:output_type -> proto.CalculateFreightResponse
+	22, // 24: proto.User.BindWaybillResource:output_type -> proto.BindWaybillResourceResponse
+	24, // 25: proto.User.GetWaybillResources:output_type -> proto.GetWaybillResourcesResponse
+	26, // 26: proto.User.ReportException:output_type -> proto.ReportExceptionResponse
+	15, // [15:27] is the sub-list for method output_type
+	3,  // [3:15] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name
@@ -2500,7 +3108,7 @@ func file_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_proto_rawDesc), len(file_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -24,7 +24,7 @@ func generateOrderID() string {
 func (c *UserServer) CreateLogisticsOrder(_ context.Context, in *__.CreateLogisticsOrderRequest) (*__.CreateLogisticsOrderResponse, error) {
 	creatorID64, err := strconv.ParseInt(in.CreatorId, 10, 32)
 	if err != nil {
-		return nil, fmt.Errorf("无效的创建者ID: %v", err)
+		return nil, fmt.Errorf("无效的创建者ID")
 	}
 	creatorID := int32(creatorID64)
 
@@ -38,7 +38,7 @@ func (c *UserServer) CreateLogisticsOrder(_ context.Context, in *__.CreateLogist
 	estimatedDays := util.CalculateEstimatedDays(distance, in.TransportType, "标准")
 	estimatedArrival := time.Now().AddDate(0, 0, estimatedDays)
 
-	// 计算基础运费（如果需要的话）
+	// 计算基础运费
 	baseFreight := util.CalculateBaseFreight(float64(in.CargoWeight), float64(in.CargoVolume), distance, in.TransportType)
 
 	newWaybill := model.Waybill{
@@ -62,9 +62,9 @@ func (c *UserServer) CreateLogisticsOrder(_ context.Context, in *__.CreateLogist
 		Remark:           in.Remark,
 	}
 
-	if err := tx.Create(&newWaybill).Error; err != nil {
+	if err = tx.Create(&newWaybill).Error; err != nil {
 		tx.Rollback()
-		return nil, fmt.Errorf("创建运单失败: %v", err)
+		return nil, fmt.Errorf("创建运单失败")
 	}
 
 	// 使用工具函数生成状态描述
@@ -80,7 +80,7 @@ func (c *UserServer) CreateLogisticsOrder(_ context.Context, in *__.CreateLogist
 
 	if err := tx.Create(&newLog).Error; err != nil {
 		tx.Rollback()
-		return nil, fmt.Errorf("创建运单日志失败: %v", err)
+		return nil, fmt.Errorf("创建运单日志失败")
 	}
 
 	tx.Commit()
@@ -91,7 +91,7 @@ func (c *UserServer) CreateLogisticsOrder(_ context.Context, in *__.CreateLogist
 	}, nil
 }
 
-// GetWaybill 运单查询接口 (支持单条查询和条件查询，带分页)
+// 运单查询接口 (支持单条查询和条件查询，带分页)
 func (c *UserServer) GetWaybill(_ context.Context, in *__.GetWaybillRequest) (*__.GetWaybillResponse, error) {
 	var waybills []model.Waybill
 	var total int64
@@ -217,7 +217,7 @@ func (c *UserServer) GetWaybill(_ context.Context, in *__.GetWaybillRequest) (*_
 	}, nil
 }
 
-// UpdateWaybillStatus 运单状态更新接口
+// 运单状态更新接口
 func (c *UserServer) UpdateWaybillStatus(_ context.Context, in *__.UpdateWaybillStatusRequest) (*__.UpdateWaybillStatusResponse, error) {
 	// 开启事务
 	tx := global.DB.Begin()
@@ -278,7 +278,7 @@ func (c *UserServer) UpdateWaybillStatus(_ context.Context, in *__.UpdateWaybill
 	}, nil
 }
 
-// UpdateWaybillInfo 运单信息修改接口
+// 运单信息修改接口
 func (c *UserServer) UpdateWaybillInfo(_ context.Context, in *__.UpdateWaybillInfoRequest) (*__.UpdateWaybillInfoResponse, error) {
 	// 开启事务
 	tx := global.DB.Begin()
@@ -312,15 +312,11 @@ func (c *UserServer) UpdateWaybillInfo(_ context.Context, in *__.UpdateWaybillIn
 	}
 
 	// 如果地址、重量、体积或运输方式发生变化，重新计算运费和预计送达时间
-	var newFreight float64 = in.Freight
-	var newEstimatedArrival time.Time = waybill.EstimatedArrival
+	var newFreight = in.Freight
+	var newEstimatedArrival = waybill.EstimatedArrival
 
 	// 检查是否需要重新计算
-	if in.SenderAddress != waybill.SenderAddress ||
-		in.ReceiverAddress != waybill.ReceiverAddress ||
-		in.CargoWeight != waybill.CargoWeight ||
-		in.CargoVolume != waybill.CargoVolume ||
-		in.TransportType != waybill.TransportType {
+	if in.SenderAddress != waybill.SenderAddress || in.ReceiverAddress != waybill.ReceiverAddress || in.CargoWeight != waybill.CargoWeight || in.CargoVolume != waybill.CargoVolume || in.TransportType != waybill.TransportType {
 
 		// 重新计算距离和运费
 		distance := util.CalculateDistance(in.SenderAddress, in.ReceiverAddress)
@@ -369,7 +365,7 @@ func (c *UserServer) UpdateWaybillInfo(_ context.Context, in *__.UpdateWaybillIn
 	}, nil
 }
 
-// Can celWaybill 运单取消接口
+// 运单取消接口
 func (c *UserServer) CancelWaybill(_ context.Context, in *__.CancelWaybillRequest) (*__.CancelWaybillResponse, error) {
 	// 开启事务
 	tx := global.DB.Begin()
@@ -474,7 +470,7 @@ func (c *UserServer) CancelWaybill(_ context.Context, in *__.CancelWaybillReques
 	}, nil
 }
 
-// GetWaybillTrack 运单轨迹查询接口
+// 运单轨迹查询接口
 func (c *UserServer) GetWaybillTrack(_ context.Context, in *__.GetWaybillTrackRequest) (*__.GetWaybillTrackResponse, error) {
 	// 查询运单基本信息
 	var waybill model.Waybill
@@ -546,7 +542,7 @@ func (c *UserServer) GetWaybillTrack(_ context.Context, in *__.GetWaybillTrackRe
 	}, nil
 }
 
-// CalculateFreight 运单费用计算接口
+// 运单费用计算接口
 func (c *UserServer) CalculateFreight(_ context.Context, in *__.CalculateFreightRequest) (*__.CalculateFreightResponse, error) {
 	// 计算距离（模拟地址解析和距离计算）
 	distance := util.CalculateDistance(in.SenderAddress, in.ReceiverAddress)
@@ -677,8 +673,7 @@ func (c *UserServer) CalculateFreight(_ context.Context, in *__.CalculateFreight
 	}
 
 	// 计算总费用
-	additionalFreight := distanceAdditionalFee + serviceAdditionalFee + volumeAdditionalFee +
-		fuelSurcharge + insuranceFee + receiptFee + packagingFee
+	additionalFreight := distanceAdditionalFee + serviceAdditionalFee + volumeAdditionalFee + fuelSurcharge + insuranceFee + receiptFee + packagingFee
 	totalFreight := baseFreight + additionalFreight
 
 	// 计算预计送达时间
@@ -703,5 +698,193 @@ func (c *UserServer) CalculateFreight(_ context.Context, in *__.CalculateFreight
 		FreightRule:           "按重量、体积、距离综合计费，含燃油附加费",
 		ValidityPeriod:        "报价有效期7天",
 		CalculationTime:       time.Now().Format("2006-01-02 15:04:05"),
+	}, nil
+}
+
+// 运单资源绑定接口
+func (c *UserServer) BindWaybillResource(_ context.Context, in *__.BindWaybillResourceRequest) (*__.BindWaybillResourceResponse, error) {
+	tx := global.DB.Begin()
+
+	// 查询运单
+	var waybill model.Waybill
+	if err := tx.Where("id = ?", in.WaybillId).First(&waybill).Error; err != nil {
+		tx.Rollback()
+		return &__.BindWaybillResourceResponse{Code: 404, Message: "运单不存在"}, nil
+	}
+
+	// 更新资源绑定
+	updateData := map[string]interface{}{}
+	if in.VehicleId != "" {
+		updateData["vehicle_id"] = in.VehicleId
+	}
+	if in.DriverId > 0 {
+		updateData["drive_id"] = in.DriverId
+	}
+
+	// 如果绑定了资源且运单状态为pending，更新为assigned
+	if len(updateData) > 0 && waybill.Status == "pending" {
+		updateData["status"] = "assigned"
+	}
+
+	// 执行更新
+	if err := tx.Model(&waybill).Updates(updateData).Error; err != nil {
+		tx.Rollback()
+		return &__.BindWaybillResourceResponse{Code: 500, Message: "绑定失败"}, nil
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return &__.BindWaybillResourceResponse{Code: 500, Message: "提交失败"}, nil
+	}
+
+	return &__.BindWaybillResourceResponse{
+		Code:      0,
+		Message:   "资源绑定成功",
+		WaybillId: in.WaybillId,
+		VehicleId: in.VehicleId,
+		DriverId:  in.DriverId,
+		BindTime:  time.Now().Format("2006-01-02 15:04:05"),
+	}, nil
+}
+
+// 查询运单资源接口
+func (c *UserServer) GetWaybillResources(_ context.Context, in *__.GetWaybillResourcesRequest) (*__.GetWaybillResourcesResponse, error) {
+	// 查询运单信息
+	var waybill model.Waybill
+	if err := global.DB.Where("id = ?", in.WaybillId).First(&waybill).Error; err != nil {
+		return &__.GetWaybillResourcesResponse{
+			Code:    404,
+			Message: "运单不存在",
+		}, nil
+	}
+
+	response := &__.GetWaybillResourcesResponse{
+		Code:      0,
+		Message:   "查询成功",
+		WaybillId: in.WaybillId,
+		VehicleId: waybill.VehicleID,
+		DriverId:  waybill.DriveID,
+		Status:    waybill.Status,
+	}
+
+	// 如果有绑定司机，查询司机详细信息
+	if waybill.DriveID > 0 {
+		var driver model.User
+		if err := global.DB.Where("id = ?", waybill.DriveID).First(&driver).Error; err == nil {
+			response.DriverName = driver.UserName
+			response.DriverMobile = driver.Mobile
+		}
+	}
+
+	// 设置绑定时间（使用运单的更新时间作为绑定时间）
+	response.BindTime = waybill.UpdateAt.Format("2006-01-02 15:04:05")
+
+	return response, nil
+}
+
+// 异常上报接口
+func (c *UserServer) ReportException(_ context.Context, in *__.ReportExceptionRequest) (*__.ReportExceptionResponse, error) {
+	// 开启事务
+	tx := global.DB.Begin()
+
+	// 验证运单是否存在
+	var waybill model.Waybill
+	if err := tx.Where("id = ?", in.WaybillId).First(&waybill).Error; err != nil {
+		tx.Rollback()
+		return &__.ReportExceptionResponse{
+			Code:    404,
+			Message: "运单不存在",
+		}, nil
+	}
+
+	// 生成异常单号
+	exceptionID := uuid.NewString()
+
+	// 计算预计解决时间（根据异常类型设定不同的解决时间）
+	var resolveHours int
+	switch in.ExceptionType {
+	case "damage":
+		resolveHours = 24 // 损坏类异常24小时内解决
+	case "delay":
+		resolveHours = 12 // 延误类异常12小时内解决
+	case "lost":
+		resolveHours = 72 // 丢失类异常72小时内解决
+	case "address_error":
+		resolveHours = 6 // 地址错误6小时内解决
+	case "refused":
+		resolveHours = 48 // 拒收类异常48小时内解决
+	default:
+		resolveHours = 24 // 默认24小时
+	}
+
+	expectedResolveTime := time.Now().Add(time.Duration(resolveHours) * time.Hour)
+
+	// 创建异常记录
+	exception := model.WaybillException{
+		ID:            exceptionID,
+		WaybillID:     in.WaybillId,
+		ExceptionType: in.ExceptionType,
+		Description:   in.Description,
+		ReporterID:    in.ReporterId,
+		ReporterType:  in.ReporterType,
+		Location:      in.Location,
+		DamageLevel:   in.DamageLevel,
+		EstimatedLoss: in.EstimatedLoss,
+		ContactPhone:  in.ContactPhone,
+		Remark:        in.Remark,
+		Status:        "reported",
+		ReportTime:    time.Now(),
+	}
+
+	// 保存异常记录
+	if err := tx.Create(&exception).Error; err != nil {
+		tx.Rollback()
+		return &__.ReportExceptionResponse{
+			Code:    500,
+			Message: fmt.Sprintf("创建异常记录失败: %v", err),
+		}, nil
+	}
+
+	// 保存附件信息
+	if len(in.AttachmentUrls) > 0 {
+		for _, url := range in.AttachmentUrls {
+			attachment := model.ExceptionAttachment{
+				ExceptionID: exceptionID,
+				FileName:    "attachment",
+				FileURL:     url,
+				FileType:    "image", // 默认为图片类型
+				UploadTime:  time.Now(),
+			}
+			if err := tx.Create(&attachment).Error; err != nil {
+				tx.Rollback()
+				return &__.ReportExceptionResponse{
+					Code:    500,
+					Message: "保存附件信息失败",
+				}, nil
+			}
+		}
+	}
+
+	// 如果是严重异常，可能需要更新运单状态
+	if in.ExceptionType == "lost" || (in.ExceptionType == "damage" && in.DamageLevel == "severe") {
+		// 可以考虑将运单状态更新为异常状态，这里暂时不做处理
+		// tx.Model(&waybill).Update("status", "exception")
+	}
+
+	// 提交事务
+	if err := tx.Commit().Error; err != nil {
+		return &__.ReportExceptionResponse{
+			Code:    500,
+			Message: "提交事务失败",
+		}, nil
+	}
+
+	return &__.ReportExceptionResponse{
+		Code:                0,
+		Message:             "异常上报成功",
+		ExceptionId:         exceptionID,
+		WaybillId:           in.WaybillId,
+		ReportTime:          exception.ReportTime.Format("2006-01-02T15:04:05Z"),
+		ExpectedResolveTime: expectedResolveTime.Format("2006-01-02T15:04:05Z"),
+		Status:              "reported",
 	}, nil
 }

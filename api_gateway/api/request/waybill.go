@@ -94,3 +94,32 @@ type CalculateFreightRequest struct {
 	NeedReceipt          bool    `json:"need_receipt" form:"need_receipt"`                             // 是否需要回单
 	NeedPackaging        bool    `json:"need_packaging" form:"need_packaging"`                         // 是否需要包装服务
 }
+
+// BindWaybillResourceRequest 运单资源绑定请求
+type BindWaybillResourceRequest struct {
+	WaybillId  string `json:"waybill_id" form:"waybill_id" binding:"required"`   // 运单编号 (必填)
+	VehicleId  string `json:"vehicle_id" form:"vehicle_id"`                      // 车辆ID (可选)
+	DriverId   int32  `json:"driver_id" form:"driver_id"`                        // 司机ID (可选)
+	OperatorId int32  `json:"operator_id" form:"operator_id" binding:"required"` // 操作人ID (必填)
+	Remark     string `json:"remark" form:"remark"`                              // 备注信息 (可选)
+}
+
+// GetWaybillResourcesRequest 查询运单资源请求
+type GetWaybillResourcesRequest struct {
+	WaybillId string `json:"waybill_id" form:"waybill_id" binding:"required"` // 运单编号 (必填)
+}
+
+// ReportExceptionRequest 异常上报请求
+type ReportExceptionRequest struct {
+	WaybillId      string   `json:"waybill_id" form:"waybill_id" binding:"required"`         // 运单ID (必填)
+	ExceptionType  string   `json:"exception_type" form:"exception_type" binding:"required"` // 异常类型 (必填: damage/delay/lost/address_error/refused)
+	Description    string   `json:"description" form:"description" binding:"required"`       // 异常描述 (必填)
+	ReporterId     int32    `json:"reporter_id" form:"reporter_id" binding:"required"`       // 上报人ID (必填)
+	ReporterType   string   `json:"reporter_type" form:"reporter_type" binding:"required"`   // 上报人类型 (必填: driver/customer_service/customer)
+	Location       string   `json:"location" form:"location"`                                // 异常发生地点 (可选)
+	AttachmentUrls []string `json:"attachment_urls" form:"attachment_urls"`                  // 附件URL列表 (可选)
+	DamageLevel    string   `json:"damage_level" form:"damage_level"`                        // 损坏程度 (可选: minor/moderate/severe)
+	EstimatedLoss  float64  `json:"estimated_loss" form:"estimated_loss"`                    // 预估损失金额 (可选)
+	ContactPhone   string   `json:"contact_phone" form:"contact_phone"`                      // 联系电话 (可选)
+	Remark         string   `json:"remark" form:"remark"`                                    // 备注信息 (可选)
+}

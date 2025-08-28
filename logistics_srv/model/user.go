@@ -69,3 +69,70 @@ type WaybillStatusLog struct {
 func (WaybillStatusLog) TableName() string {
 	return "waybill_status_log"
 }
+
+// WaybillException 运单异常表
+type WaybillException struct {
+	ID                 string    `gorm:"column:id;type:varchar(36);comment:异常编号;primaryKey;not null;" json:"id"`                              // 异常编号
+	WaybillID          string    `gorm:"column:waybill_id;type:varchar(36);comment:运单编号;not null;" json:"waybill_id"`                         // 运单编号
+	ExceptionType      string    `gorm:"column:exception_type;type:varchar(20);comment:异常类型;not null;" json:"exception_type"`                 // 异常类型
+	Description        string    `gorm:"column:description;type:text;comment:异常描述;not null;" json:"description"`                              // 异常描述
+	Status             string    `gorm:"column:status;type:varchar(20);comment:异常状态;not null;default:reported;" json:"status"`                // 异常状态
+	ReporterID         int32     `gorm:"column:reporter_id;type:int;comment:上报人ID;not null;" json:"reporter_id"`                              // 上报人ID
+	ReporterType       string    `gorm:"column:reporter_type;type:varchar(20);comment:上报人类型;not null;" json:"reporter_type"`                  // 上报人类型
+	Location           string    `gorm:"column:location;type:varchar(200);comment:异常地点;default:NULL;" json:"location"`                        // 异常地点
+	DamageLevel        string    `gorm:"column:damage_level;type:varchar(10);comment:损坏程度;default:NULL;" json:"damage_level"`                 // 损坏程度
+	EstimatedLoss      float64   `gorm:"column:estimated_loss;type:decimal(10,2);comment:预估损失金额;default:0.00;" json:"estimated_loss"`         // 预估损失金额
+	CompensationAmount float64   `gorm:"column:compensation_amount;type:decimal(10,2);comment:赔偿金额;default:0.00;" json:"compensation_amount"` // 赔偿金额
+	CompensationType   string    `gorm:"column:compensation_type;type:varchar(20);comment:赔偿方式;default:NULL;" json:"compensation_type"`       // 赔偿方式
+	HandlerID          int32     `gorm:"column:handler_id;type:int;comment:当前处理人ID;default:NULL;" json:"handler_id"`                          // 当前处理人ID
+	ContactPhone       string    `gorm:"column:contact_phone;type:char(11);comment:联系电话;default:NULL;" json:"contact_phone"`                  // 联系电话
+	Remark             string    `gorm:"column:remark;type:text;comment:备注信息;" json:"remark"`                                                 // 备注信息
+	ReportTime         time.Time `gorm:"column:report_time;type:datetime(3);comment:上报时间;default:CURRENT_TIMESTAMP(3);" json:"report_time"`   // 上报时间
+	HandleTime         time.Time `gorm:"column:handle_time;type:datetime(3);comment:开始处理时间;default:NULL;" json:"handle_time"`                 // 开始处理时间
+	ResolveTime        time.Time `gorm:"column:resolve_time;type:datetime(3);comment:解决时间;default:NULL;" json:"resolve_time"`                 // 解决时间
+	CreateAt           time.Time `gorm:"column:create_at;type:datetime(3);comment:创建时间;default:CURRENT_TIMESTAMP(3);" json:"create_at"`       // 创建时间
+	UpdateAt           time.Time `gorm:"column:update_at;type:datetime(3);comment:更新时间;default:CURRENT_TIMESTAMP(3);" json:"update_at"`       // 更新时间
+	DeleteAt           time.Time `gorm:"column:delete_at;type:datetime(3);comment:删除时间;default:NULL;" json:"delete_at"`                       // 删除时间
+}
+
+// TableName 自定义表名
+func (WaybillException) TableName() string {
+	return "waybill_exception"
+}
+
+// ExceptionHandleLog 异常处理记录表
+type ExceptionHandleLog struct {
+	ID                 int32     `gorm:"column:id;type:int;primaryKey;autoIncrement;not null;comment:记录ID" json:"id"`                         // 记录ID
+	ExceptionID        string    `gorm:"column:exception_id;type:varchar(36);comment:异常编号;not null;" json:"exception_id"`                     // 异常编号
+	Action             string    `gorm:"column:action;type:varchar(20);comment:处理动作;not null;" json:"action"`                                 // 处理动作
+	OldStatus          string    `gorm:"column:old_status;type:varchar(20);comment:原状态;default:NULL;" json:"old_status"`                      // 原状态
+	NewStatus          string    `gorm:"column:new_status;type:varchar(20);comment:新状态;not null;" json:"new_status"`                          // 新状态
+	HandlerID          int32     `gorm:"column:handler_id;type:int;comment:处理人ID;not null;" json:"handler_id"`                                // 处理人ID
+	Solution           string    `gorm:"column:solution;type:text;comment:解决方案;default:NULL;" json:"solution"`                                // 解决方案
+	CompensationAmount float64   `gorm:"column:compensation_amount;type:decimal(10,2);comment:赔偿金额;default:0.00;" json:"compensation_amount"` // 赔偿金额
+	CompensationType   string    `gorm:"column:compensation_type;type:varchar(20);comment:赔偿方式;default:NULL;" json:"compensation_type"`       // 赔偿方式
+	Remark             string    `gorm:"column:remark;type:text;comment:备注;default:NULL;" json:"remark"`                                      // 备注
+	CreateTime         time.Time `gorm:"column:create_time;type:datetime(3);comment:创建时间;default:CURRENT_TIMESTAMP(3);" json:"create_time"`   // 创建时间
+}
+
+// TableName 自定义表名
+func (ExceptionHandleLog) TableName() string {
+	return "exception_handle_log"
+}
+
+// ExceptionAttachment 异常附件表
+type ExceptionAttachment struct {
+	ID          int32     `gorm:"column:id;type:int;primaryKey;autoIncrement;not null;comment:附件ID" json:"id"`                       // 附件ID
+	ExceptionID string    `gorm:"column:exception_id;type:varchar(36);comment:异常编号;not null;" json:"exception_id"`                   // 异常编号
+	LogID       int32     `gorm:"column:log_id;type:int;comment:处理记录ID;default:NULL;" json:"log_id"`                                 // 处理记录ID(可选)
+	FileName    string    `gorm:"column:file_name;type:varchar(200);comment:文件名;not null;" json:"file_name"`                         // 文件名
+	FileURL     string    `gorm:"column:file_url;type:varchar(500);comment:文件URL;not null;" json:"file_url"`                         // 文件URL
+	FileType    string    `gorm:"column:file_type;type:varchar(10);comment:文件类型;not null;" json:"file_type"`                         // 文件类型(image/document)
+	FileSize    int32     `gorm:"column:file_size;type:int;comment:文件大小;default:NULL;" json:"file_size"`                             // 文件大小
+	UploadTime  time.Time `gorm:"column:upload_time;type:datetime(3);comment:上传时间;default:CURRENT_TIMESTAMP(3);" json:"upload_time"` // 上传时间
+}
+
+// TableName 自定义表名
+func (ExceptionAttachment) TableName() string {
+	return "exception_attachment"
+}

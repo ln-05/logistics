@@ -5,21 +5,19 @@ go 1.23.0
 toolchain go1.24.2
 
 require (
-	github.com/go-redis/redis/v8 v8.11.5
-	github.com/spf13/viper v1.20.1
-	google.golang.org/grpc v1.75.0
-	gorm.io/driver/mysql v1.6.0
-
-)
-
-require (
 	github.com/Baidu-AIP/golang-sdk v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.10.1
+	github.com/go-redis/redis/v8 v8.11.5
 	github.com/google/uuid v1.6.0
 	github.com/nacos-group/nacos-sdk-go v1.1.6
+	github.com/spf13/viper v1.20.1
+	github.com/stretchr/testify v1.10.0
 	go.uber.org/zap v1.27.0
+	google.golang.org/grpc v1.75.0
 	google.golang.org/protobuf v1.36.8
+	gorm.io/driver/mysql v1.6.0
+	gorm.io/driver/sqlite v1.6.0
 	gorm.io/gorm v1.30.1
 )
 
@@ -31,6 +29,7 @@ require (
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
@@ -49,10 +48,12 @@ require (
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sagikazarmark/locafero v0.10.0 // indirect
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
 	github.com/spf13/afero v1.14.0 // indirect

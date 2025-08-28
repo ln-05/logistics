@@ -28,6 +28,9 @@ const (
 	User_CancelWaybill_FullMethodName        = "/proto.User/CancelWaybill"
 	User_GetWaybillTrack_FullMethodName      = "/proto.User/GetWaybillTrack"
 	User_CalculateFreight_FullMethodName     = "/proto.User/CalculateFreight"
+	User_BindWaybillResource_FullMethodName  = "/proto.User/BindWaybillResource"
+	User_GetWaybillResources_FullMethodName  = "/proto.User/GetWaybillResources"
+	User_ReportException_FullMethodName      = "/proto.User/ReportException"
 )
 
 // UserClient is the client API for User service.
@@ -36,6 +39,7 @@ const (
 type UserClient interface {
 	SendSms(ctx context.Context, in *SendSmsRequest, opts ...grpc.CallOption) (*SendSmsResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	// 运单创建接口
 	CreateLogisticsOrder(ctx context.Context, in *CreateLogisticsOrderRequest, opts ...grpc.CallOption) (*CreateLogisticsOrderResponse, error)
 	// 运单查询接口 (支持单条查询和条件查询，带分页)
 	GetWaybill(ctx context.Context, in *GetWaybillRequest, opts ...grpc.CallOption) (*GetWaybillResponse, error)
@@ -43,12 +47,18 @@ type UserClient interface {
 	UpdateWaybillStatus(ctx context.Context, in *UpdateWaybillStatusRequest, opts ...grpc.CallOption) (*UpdateWaybillStatusResponse, error)
 	// 运单信息修改接口
 	UpdateWaybillInfo(ctx context.Context, in *UpdateWaybillInfoRequest, opts ...grpc.CallOption) (*UpdateWaybillInfoResponse, error)
-	// 运单取消接口
+	// 运单取消接口7
 	CancelWaybill(ctx context.Context, in *CancelWaybillRequest, opts ...grpc.CallOption) (*CancelWaybillResponse, error)
 	// 运单轨迹查询接口
 	GetWaybillTrack(ctx context.Context, in *GetWaybillTrackRequest, opts ...grpc.CallOption) (*GetWaybillTrackResponse, error)
 	// 运单费用计算接口
 	CalculateFreight(ctx context.Context, in *CalculateFreightRequest, opts ...grpc.CallOption) (*CalculateFreightResponse, error)
+	// 运单资源绑定接口 (绑定车辆和司机)
+	BindWaybillResource(ctx context.Context, in *BindWaybillResourceRequest, opts ...grpc.CallOption) (*BindWaybillResourceResponse, error)
+	// 查询运单资源接口 (查询绑定的车辆和司机信息)
+	GetWaybillResources(ctx context.Context, in *GetWaybillResourcesRequest, opts ...grpc.CallOption) (*GetWaybillResourcesResponse, error)
+	// 异常上报接口
+	ReportException(ctx context.Context, in *ReportExceptionRequest, opts ...grpc.CallOption) (*ReportExceptionResponse, error)
 }
 
 type userClient struct {
@@ -149,12 +159,43 @@ func (c *userClient) CalculateFreight(ctx context.Context, in *CalculateFreightR
 	return out, nil
 }
 
+func (c *userClient) BindWaybillResource(ctx context.Context, in *BindWaybillResourceRequest, opts ...grpc.CallOption) (*BindWaybillResourceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BindWaybillResourceResponse)
+	err := c.cc.Invoke(ctx, User_BindWaybillResource_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) GetWaybillResources(ctx context.Context, in *GetWaybillResourcesRequest, opts ...grpc.CallOption) (*GetWaybillResourcesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetWaybillResourcesResponse)
+	err := c.cc.Invoke(ctx, User_GetWaybillResources_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) ReportException(ctx context.Context, in *ReportExceptionRequest, opts ...grpc.CallOption) (*ReportExceptionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReportExceptionResponse)
+	err := c.cc.Invoke(ctx, User_ReportException_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
 type UserServer interface {
 	SendSms(context.Context, *SendSmsRequest) (*SendSmsResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	// 运单创建接口
 	CreateLogisticsOrder(context.Context, *CreateLogisticsOrderRequest) (*CreateLogisticsOrderResponse, error)
 	// 运单查询接口 (支持单条查询和条件查询，带分页)
 	GetWaybill(context.Context, *GetWaybillRequest) (*GetWaybillResponse, error)
@@ -162,12 +203,18 @@ type UserServer interface {
 	UpdateWaybillStatus(context.Context, *UpdateWaybillStatusRequest) (*UpdateWaybillStatusResponse, error)
 	// 运单信息修改接口
 	UpdateWaybillInfo(context.Context, *UpdateWaybillInfoRequest) (*UpdateWaybillInfoResponse, error)
-	// 运单取消接口
+	// 运单取消接口7
 	CancelWaybill(context.Context, *CancelWaybillRequest) (*CancelWaybillResponse, error)
 	// 运单轨迹查询接口
 	GetWaybillTrack(context.Context, *GetWaybillTrackRequest) (*GetWaybillTrackResponse, error)
 	// 运单费用计算接口
 	CalculateFreight(context.Context, *CalculateFreightRequest) (*CalculateFreightResponse, error)
+	// 运单资源绑定接口 (绑定车辆和司机)
+	BindWaybillResource(context.Context, *BindWaybillResourceRequest) (*BindWaybillResourceResponse, error)
+	// 查询运单资源接口 (查询绑定的车辆和司机信息)
+	GetWaybillResources(context.Context, *GetWaybillResourcesRequest) (*GetWaybillResourcesResponse, error)
+	// 异常上报接口
+	ReportException(context.Context, *ReportExceptionRequest) (*ReportExceptionResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -204,6 +251,15 @@ func (UnimplementedUserServer) GetWaybillTrack(context.Context, *GetWaybillTrack
 }
 func (UnimplementedUserServer) CalculateFreight(context.Context, *CalculateFreightRequest) (*CalculateFreightResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CalculateFreight not implemented")
+}
+func (UnimplementedUserServer) BindWaybillResource(context.Context, *BindWaybillResourceRequest) (*BindWaybillResourceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BindWaybillResource not implemented")
+}
+func (UnimplementedUserServer) GetWaybillResources(context.Context, *GetWaybillResourcesRequest) (*GetWaybillResourcesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWaybillResources not implemented")
+}
+func (UnimplementedUserServer) ReportException(context.Context, *ReportExceptionRequest) (*ReportExceptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReportException not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 func (UnimplementedUserServer) testEmbeddedByValue()              {}
@@ -388,6 +444,60 @@ func _User_CalculateFreight_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_BindWaybillResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BindWaybillResourceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).BindWaybillResource(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_BindWaybillResource_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).BindWaybillResource(ctx, req.(*BindWaybillResourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_GetWaybillResources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWaybillResourcesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetWaybillResources(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_GetWaybillResources_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetWaybillResources(ctx, req.(*GetWaybillResourcesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_ReportException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReportExceptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).ReportException(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_ReportException_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).ReportException(ctx, req.(*ReportExceptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -430,6 +540,18 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CalculateFreight",
 			Handler:    _User_CalculateFreight_Handler,
+		},
+		{
+			MethodName: "BindWaybillResource",
+			Handler:    _User_BindWaybillResource_Handler,
+		},
+		{
+			MethodName: "GetWaybillResources",
+			Handler:    _User_GetWaybillResources_Handler,
+		},
+		{
+			MethodName: "ReportException",
+			Handler:    _User_ReportException_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

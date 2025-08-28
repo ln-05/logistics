@@ -11,7 +11,7 @@ func LoadRouter(r *gin.Engine) {
 	{
 		user := g.Group("/user")
 		{
-			user.POST("/sendsms", hander.Sendsms)
+			user.POST("/sends", hander.Sendsms)
 			user.POST("/login", hander.Login)
 		}
 		waybill := g.Group("/waybill")
@@ -23,6 +23,9 @@ func LoadRouter(r *gin.Engine) {
 			waybill.POST("/CancelWaybill", hander.CancelWaybill)
 			waybill.POST("/GetWaybillTrack", hander.GetWaybillTrack)
 			waybill.POST("/CalculateFreight", hander.CalculateFreight)
+			waybill.POST("/BindWaybillResource", hander.BindWaybillResource)
+			waybill.POST("/GetWaybillResources", hander.GetWaybillResources)
+			waybill.POST("/ReportExceptionRequest", hander.ReportException)
 		}
 
 	}

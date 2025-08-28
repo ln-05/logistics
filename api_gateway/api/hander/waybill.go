@@ -384,3 +384,152 @@ func CalculateFreight(c *gin.Context) {
 		"data": response,
 	})
 }
+
+// BindWaybillResource 运单资源绑定接口
+func BindWaybillResource(c *gin.Context) {
+	var req request.BindWaybillResourceRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  "参数验证失败",
+			"data": nil,
+		})
+		return
+	}
+
+	conn, err := grpc.NewClient("127.0.0.1:8300", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  "连接服务失败",
+			"data": nil,
+		})
+		return
+	}
+	defer conn.Close()
+
+	client := __.NewUserClient(conn)
+
+	response, err := client.BindWaybillResource(c, &__.BindWaybillResourceRequest{
+		WaybillId:  req.WaybillId,
+		VehicleId:  req.VehicleId,
+		DriverId:   req.DriverId,
+		OperatorId: req.OperatorId,
+		Remark:     req.Remark,
+	})
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": int(response.Code),
+		"msg":  response.Message,
+		"data": response,
+	})
+}
+
+// GetWaybillResources 查询运单资源接口
+func GetWaybillResources(c *gin.Context) {
+	var req request.GetWaybillResourcesRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  "参数验证失败",
+			"data": nil,
+		})
+		return
+	}
+
+	conn, err := grpc.NewClient("127.0.0.1:8300", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  "连接服务失败",
+			"data": nil,
+		})
+		return
+	}
+	defer conn.Close()
+
+	client := __.NewUserClient(conn)
+
+	response, err := client.GetWaybillResources(c, &__.GetWaybillResourcesRequest{
+		WaybillId: req.WaybillId,
+	})
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": int(response.Code),
+		"msg":  response.Message,
+		"data": response,
+	})
+}
+
+// ReportException 异常上报接口
+func ReportException(c *gin.Context) {
+	var req request.ReportExceptionRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  "参数验证失败",
+			"data": nil,
+		})
+		return
+	}
+
+	conn, err := grpc.NewClient("127.0.0.1:8300", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  "连接服务失败",
+			"data": nil,
+		})
+		return
+	}
+	defer conn.Close()
+
+	client := __.NewUserClient(conn)
+
+	response, err := client.ReportException(c, &__.ReportExceptionRequest{
+		WaybillId:      req.WaybillId,
+		ExceptionType:  req.ExceptionType,
+		Description:    req.Description,
+		ReporterId:     req.ReporterId,
+		ReporterType:   req.ReporterType,
+		Location:       req.Location,
+		AttachmentUrls: req.AttachmentUrls,
+		DamageLevel:    req.DamageLevel,
+		EstimatedLoss:  req.EstimatedLoss,
+		ContactPhone:   req.ContactPhone,
+		Remark:         req.Remark,
+	})
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": int(response.Code),
+		"msg":  response.Message,
+		"data": response,
+	})
+}

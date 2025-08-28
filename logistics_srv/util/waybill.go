@@ -2,7 +2,10 @@ package util
 
 import (
 	"fmt"
+	"github.com/google/uuid"
+	"math/rand"
 	"strings"
+	"time"
 )
 
 // GetStatusName 获取状态中文名称
@@ -224,4 +227,108 @@ func CalculateEstimatedDays(distance float64, transportType, serviceType string)
 	}
 
 	return baseDays
+}
+
+// GenerateExceptionID 生成异常单号
+func GenerateExceptionID() string {
+	// 使用时间戳 + 随机数的方式生成异常ID
+	// 格式: EX + YYYYMMDD + HHMMSS + 4位随机数
+	now := time.Now()
+	timeStr := now.Format("20060102150405")
+	randomNum := rand.Intn(9000) + 1000 // 生成1000-9999的随机数
+	return fmt.Sprintf("EX%s%04d", timeStr, randomNum)
+}
+
+// GenerateExceptionUUID 生成基于UUID的异常ID
+func GenerateExceptionUUID() string {
+	return uuid.New().String()
+}
+
+// ValidateExceptionType 验证异常类型
+func ValidateExceptionType(exceptionType string) bool {
+	validTypes := map[string]bool{
+		"damage":        true, // 货物损坏
+		"delay":         true, // 运输延误
+		"lost":          true, // 货物丢失
+		"address_error": true, // 地址错误
+		"refused":       true, // 客户拒收
+	}
+	return validTypes[exceptionType]
+}
+
+// ValidateDamageLevel 验证损坏程度
+func ValidateDamageLevel(damageLevel string) bool {
+	if damageLevel == "" {
+		return true // 可选字段
+	}
+	validLevels := map[string]bool{
+		"minor":    true, // 轻微
+		"moderate": true, // 中等
+		"severe":   true, // 严重
+	}
+	return validLevels[damageLevel]
+}
+
+// ValidateReporterType 验证上报人类型
+func ValidateReporterType(reporterType string) bool {
+	validTypes := map[string]bool{
+		"driver":           true, // 司机
+		"customer_service": true, // 客服
+		"customer":         true, // 客户
+	}
+	return validTypes[reporterType]
+}
+
+// CalculateExpectedResolveTime 根据异常类型计算预计解决时间
+func CalculateExpectedResolveTime(exceptionType string) time.Time {
+	now := time.Now()
+
+	// 根据异常类型设置不同的解决时长
+	switch exceptionType {
+	case "damage":
+		return now.Add(48 * time.Hour) // 货物损坏：48小时
+	case "delay":
+		return now.Add(24 * time.Hour) // 运输延误：24小时
+	case "lost":
+		return now.Add(72 * time.Hour) // 货物丢失：72小时
+	case "address_error":
+		return now.Add(12 * time.Hour) // 地址错误：12小时
+	case "refused":
+		return now.Add(24 * time.Hour) // 客户拒收：24小时
+	default:
+		return now.Add(24 * time.Hour) // 默认：24小时
+	}
+}
+
+// GetExceptionTypeName 获取异常类型中文名称
+func GetExceptionTypeName(exceptionType string) string {
+	typeMap := map[string]string{
+		"damage":        "货物损坏",
+		"delay":         "运输延误",
+		"lost":          "货物丢失",
+		"address_error": "地址错误",
+		"refused":       "客户拒收",
+	}
+
+	if name, ok := typeMap[exceptionType]; ok {
+		return name
+	}
+	return "未知异常"
+}
+
+// GetExceptionStatusName 获取异常状态中文名称
+func GetExceptionStatusName(status string) string {
+	statusMap := map[string]string{
+		"reported":   "已上报",
+		"assigned":   "已分配",
+		"processing": "处理中",
+		"resolved":   "已解决",
+		"closed":     "已关闭",
+		"escalated":  "已升级",
+	}
+
+	if name, ok := statusMap[status]; ok {
+		return name
+	}
+	return "未知状态"
 }
